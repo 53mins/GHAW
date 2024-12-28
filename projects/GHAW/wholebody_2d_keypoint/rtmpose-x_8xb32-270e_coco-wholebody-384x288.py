@@ -8,8 +8,8 @@ input_size = (288, 384)
 max_epochs = 270
 stage2_num_epochs = 30
 base_lr = 4e-3
-train_batch_size = 64
-val_batch_size = 64
+train_batch_size = 24
+val_batch_size = 24
 
 train_cfg = dict(max_epochs=max_epochs, val_interval=1)
 randomness = dict(seed=21)
@@ -234,5 +234,5 @@ test_evaluator = val_evaluator
 
 visualizer = dict(vis_backends=[dict(type='LocalVisBackend'),
                                 dict(type='TensorboardVisBackend'),
-                                dict(type='WandbVisBackend'),
+                                # dict(type='WandbVisBackend'),
                                 ])

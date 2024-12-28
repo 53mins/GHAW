@@ -7,8 +7,9 @@ from .gap_neck import GlobalAveragePooling
 from .hybrid_encoder import HybridEncoder
 from .posewarper_neck import PoseWarperNeck
 from .yolox_pafpn import YOLOXPAFPN
+from .hybridneck import HybridNeck
 
 __all__ = [
     'GlobalAveragePooling', 'PoseWarperNeck', 'FPN', 'FeatureMapProcessor',
-    'ChannelMapper', 'YOLOXPAFPN', 'CSPNeXtPAFPN', 'HybridEncoder'
+    'ChannelMapper', 'YOLOXPAFPN', 'CSPNeXtPAFPN', 'HybridEncoder', 'HybridNeck'
 ]

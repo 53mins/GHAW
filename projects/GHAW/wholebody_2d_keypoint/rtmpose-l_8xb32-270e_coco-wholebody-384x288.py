@@ -8,8 +8,8 @@ input_size = (288, 384)
 max_epochs = 270
 stage2_num_epochs = 30
 base_lr = 4e-3
-train_batch_size = 64
-val_batch_size = 64
+train_batch_size = 24
+val_batch_size = 24
 
 train_cfg = dict(max_epochs=max_epochs, val_interval=1)
 randomness = dict(seed=21)
@@ -65,8 +65,8 @@ model = dict(
         type='CSPNeXt',
         arch='P5',
         expand_ratio=0.5,
-        deepen_factor=1.33,
-        widen_factor=1.25,
+        deepen_factor=1.,
+        widen_factor=1.,
         out_indices=(4, ),
         channel_attention=True,
         norm_cfg=dict(type='SyncBN'),
@@ -75,11 +75,11 @@ model = dict(
             type='Pretrained',
             prefix='backbone.',
             checkpoint='https://download.openmmlab.com/mmpose/v1/projects/'
-            'rtmposev1/cspnext-x_udp-body7_210e-384x288-d28b58e6_20230529.pth'  # noqa
+            'rtmposev1/cspnext-l_udp-aic-coco_210e-256x192-273b7631_20230130.pth'  # noqa
         )),
     head=dict(
         type='RTMCCHead',
-        in_channels=1280,
+        in_channels=1024,
         out_channels=num_keypoints,
         input_size=codec['input_size'],
         in_featuremap_size=tuple([s // 32 for s in codec['input_size']]),
@@ -116,7 +116,7 @@ train_pipeline = [
     dict(type='RandomFlip', direction='horizontal'),
     dict(type='RandomHalfBody'),
     dict(
-        type='RandomBBoxTransform', scale_factor=[0.5, 1.5], rotate_factor=90),
+        type='RandomBBoxTransform', scale_factor=[0.6, 1.4], rotate_factor=80),
     dict(type='TopdownAffine', input_size=codec['input_size']),
     dict(type='mmdet.YOLOXHSVRandomAug'),
     dict(
@@ -152,8 +152,8 @@ train_pipeline_stage2 = [
     dict(
         type='RandomBBoxTransform',
         shift_factor=0.,
-        scale_factor=[0.5, 1.5],
-        rotate_factor=90),
+        scale_factor=[0.75, 1.25],
+        rotate_factor=60),
     dict(type='TopdownAffine', input_size=codec['input_size']),
     dict(type='mmdet.YOLOXHSVRandomAug'),
     dict(
@@ -191,7 +191,7 @@ train_dataloader = dict(
     ))
 val_dataloader = dict(
     batch_size=val_batch_size,
-    num_workers=2,
+    num_workers=3,
     persistent_workers=True,
     drop_last=False,
     sampler=dict(type='DefaultSampler', shuffle=False, round_up=False),
@@ -234,5 +234,5 @@ test_evaluator = val_evaluator
 
 visualizer = dict(vis_backends=[dict(type='LocalVisBackend'),
                                 dict(type='TensorboardVisBackend'),
-                                dict(type='WandbVisBackend'),
+                                # dict(type='WandbVisBackend'),
                                 ])
